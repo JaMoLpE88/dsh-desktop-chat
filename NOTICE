@@ -1,0 +1,40 @@
+dsh-desktop-chat
+Copyright 2026 JaMoLpE88
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+This project is an independent implementation. It is inspired by, and owes its
+approach to, two earlier projects:
+
+  * jaychang1989/dsh-webchat (Apache-2.0), Copyright 2026 jaychang1989 —
+    https://github.com/jaychang1989/dsh-webchat
+  * xmuwenxiang/dsh-web-chat (Apache-2.0), the predecessor of the above —
+    https://github.com/xmuwenxiang/dsh-web-chat
+
+Reused from those projects (concepts and platform integration patterns, no
+source files copied):
+
+  * the dual-face packaging of a DSH plugin — a Host half exported as ".", a
+    browser half exported as "./client" and declared through `dsh.client`, and a
+    `cordis.patch.yml` bundle row;
+  * the `window.__ModuleLoader__.load({ id, factory })` form of the emitted
+    client bundle and the `{ inject: ['slots'], apply }` module shape;
+  * rendering the official site through the desktop shell's native browser guest
+    (`dshDesktop.browser.acquire` + `<webview>`), keeping the guest outside the
+    React tree so hiding the panel never tears it down;
+  * carrying the page's own `localStorage` and `document.cookie` across restarts,
+    and the user-agent treatment that removes the `Electron/<version>` token.
+
+Written for this project:
+
+  * the persistence design and its guard rails: no `electron` import, a snapshot
+    that a logged-out page cannot degrade, an explicit logout path, and
+    diagnostics that never expose credential values;
+  * the Host routes (state/index.js), the client flow, the tests and this
+    documentation;
+  * the decision to drop the window fallbacks (BrowserWindow, chromeless
+    Edge/Chrome, system browser), which cannot work in the Desktop Host and are
+    out of scope for a Desktop-only panel.
+
+No file from either project was copied into this repository. Behaviour that
+looks identical is the platform's contract, not a shared implementation.

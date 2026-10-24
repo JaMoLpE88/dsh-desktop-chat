@@ -1,0 +1,62 @@
+{
+  "name": "@jamolpe88/dsh-desktop-chat",
+  "version": "0.1.0",
+  "description": "Opens the official DeepSeek Chat web app inside DeepSeek Harness Desktop: one sidebar entry renders chat.deepseek.com in the center column through the desktop shell's native browser guest, and keeps you signed in across restarts. No chat UI, no agent tools, no runtime dependencies.",
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "dsh-plugin",
+    "deepseek",
+    "deepseek-chat",
+    "webchat",
+    "desktop",
+    "webview"
+  ],
+  "license": "Apache-2.0",
+  "author": "JaMoLpE88",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JaMoLpE88/dsh-desktop-chat.git"
+  },
+  "homepage": "https://github.com/JaMoLpE88/dsh-desktop-chat#readme",
+  "bugs": {
+    "url": "https://github.com/JaMoLpE88/dsh-desktop-chat/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "type": "module",
+  "engines": {
+    "node": ">=22",
+    "dsh": ">=0.2.1-rc.3"
+  },
+  "main": "lib/index.js",
+  "exports": {
+    ".": {
+      "default": "./lib/index.js"
+    },
+    "./client": {
+      "default": "./lib/client.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web"
+    }
+  },
+  "files": [
+    "lib/**/*.js",
+    "cordis.patch.yml",
+    "NOTICE",
+    "README.md",
+    "CHANGELOG.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test"
+  }
+}

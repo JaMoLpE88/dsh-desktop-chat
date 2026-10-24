@@ -1,0 +1,5 @@
+node_modules/
+.research/
+*.log
+session.json
+.DS_Store
