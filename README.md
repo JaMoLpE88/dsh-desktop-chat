@@ -4,10 +4,27 @@ Abre la web oficial de **DeepSeek Chat** (`chat.deepseek.com`) dentro de **DeepS
 panel central, a través del navegador nativo integrado del escritorio. Una entrada en la barra lateral, la
 página real, y la sesión no se pierde al cerrar la aplicación.
 
-- No reimplementa el chat: muestra la web oficial tal cual.
-- No añade herramientas, modelos, agentes ni proveedores a DSH.
-- No guarda contraseñas ni envía credenciales a ningún sitio.
-- Sin dependencias en tiempo de ejecución.
+## Qué hace
+
+- Añade una entrada «Chat DeepSeek» a la barra lateral de DSH Desktop.
+- Muestra `https://chat.deepseek.com/` en el panel central, con su interfaz oficial intacta.
+- Repone la sesión al arrancar, para no tener que iniciar sesión cada vez que abres DSH.
+- Mantiene la página viva al cambiar de panel: ocultar y volver no recarga ni cierra la sesión.
+- Ofrece diagnóstico (`/api/dsh-desktop-chat/state`) y una ruta para olvidar la sesión guardada.
+
+## Qué no hace
+
+- No reimplementa el chat ni sustituye la web oficial por una interfaz propia.
+- No convierte DeepSeek en un proveedor de modelo, agente o herramienta de automatización.
+- No toca modelos, agentes, plugins ni proveedores de DSH.
+- No guarda contraseñas, ni lee el perfil de tu navegador personal, ni envía credenciales a ningún sitio.
+- No puede conservar cookies `HttpOnly`: DSH no expone a los plugins el almacén de cookies de la vista.
+
+## Requisitos
+
+- **DSH Desktop** `>= 0.2.1-rc.3`, perfil `desktop` (el perfil web no ofrece navegador integrado).
+- Windows 11 (probado), macOS/Linux sin probar.
+- Sin dependencias en tiempo de ejecución; no hace falta Node instalado aparte.
 
 ## Instalación
 
