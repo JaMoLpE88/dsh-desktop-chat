@@ -80,7 +80,7 @@ function makeElement(tagName, stateReply) {
 
 /** Build one isolated GUI stand-in and evaluate the bundle inside it. */
 function harness(options = {}) {
-  const calls = { acquire: [], release: [], fetch: [], intervals: 0, cleared: 0 }
+  const calls = { acquire: [], release: [], fetch: [], intervals: 0, intervalCallbacks: [], cleared: 0 }
   const effects = []
   const refs = []
   const styleTags = new Map()
@@ -167,7 +167,11 @@ function harness(options = {}) {
     fetch,
     console,
     URL,
-    setInterval: () => { calls.intervals += 1; return calls.intervals },
+    setInterval: (callback) => {
+      calls.intervals += 1
+      calls.intervalCallbacks.push(callback)
+      return calls.intervals
+    },
     clearInterval: () => {},
     dshDesktop: window.dshDesktop,
     __ModuleLoader__: window.__ModuleLoader__,
@@ -335,6 +339,53 @@ test('hiding the panel hides the guest but keeps it in the document', async () =
   assert.equal(container.style.display, 'block')
   assert.equal(bundle.calls.acquire.length, 1, 'the guest is reused')
   assert.equal(bundle.calls.intervals, 1, 'no second guest timer')
+})
+
+test('an in-page login keeps the save loop alive', async () => {
+  const bundle = harness({ restoreStorage: [], restoreCookie: '' })
+  await mountPanel(bundle)
+  const { element } = bundle.guest()
+  element.url = PAGE_URL
+  element.dispatch('dom-ready')
+  element.dispatch('did-finish-load')
+  await settle()
+
+  const before = bundle.calls.fetch.filter((call) => call.url.indexOf('/session/save') !== -1).length
+  assert.ok(before >= 1, 'the first full load saved')
+
+  // The site is a single-page app: signing in navigates without a document
+  // load, so `did-start-loading` fires and `did-finish-load` never does.
+  element.dispatch('did-start-loading')
+  element.url = PAGE_URL
+  element.dispatch('did-stop-loading')
+  await settle()
+
+  const saves = bundle.calls.fetch.filter((call) => call.url.indexOf('/session/save') !== -1)
+  assert.equal(saves.length, before + 1, 'the in-page navigation triggered a save')
+  const body = JSON.parse(saves[saves.length - 1].init.body)
+  assert.equal(body.skip, undefined, 'a settled guest posts real state')
+  assert.ok(Array.isArray(body.storage))
+})
+
+test('a skipped attempt reports its reason instead of staying silent', async () => {
+  const bundle = harness()
+  await mountPanel(bundle)
+  const { element } = bundle.guest()
+  element.url = PAGE_URL
+  element.dispatch('dom-ready')
+  element.dispatch('did-finish-load')
+  await settle()
+
+  // Simulate the frozen case: the page started loading and nothing settled.
+  element.dispatch('did-start-loading')
+  bundle.calls.intervalCallbacks[0]()
+  await settle()
+
+  const last = bundle.calls.fetch[bundle.calls.fetch.length - 1]
+  const body = JSON.parse(last.init.body)
+  assert.equal(body.skip, 'not-ready')
+  assert.equal(body.storage, undefined, 'a skip body carries no state')
+  assert.equal(body.diag.ready, false)
 })
 
 test('without the native bridge the panel explains itself', async () => {

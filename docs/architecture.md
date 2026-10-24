@@ -26,6 +26,16 @@ arranque
                       └─ guarda cada 10 s y al ocultar el panel
 ```
 
+### El guardado no puede depender solo de `did-finish-load`
+
+Chat DeepSeek es una SPA: iniciar sesión navega dentro del documento, dispara `did-start-loading` y **no**
+dispara `did-finish-load`. Un bucle de guardado atado solo a `did-finish-load` se queda con `ready = false`
+para siempre y guarda únicamente el estado anterior al login (fue el fallo observado en la primera prueba).
+Por eso el invitado también escucha `did-stop-loading` y `did-navigate-in-page`, que rearman `ready` y
+guardan cuando la página sigue en su origen. Cada intento descartado se envía igualmente al Host como
+`{ skip, diag }`, para que `/state` muestre el motivo (`not-ready`, `off-origin`, `read-failed`…) en lugar de
+quedarse en silencio.
+
 ## Por qué no hay cookies `HttpOnly`
 
 Comprobado sobre `app.asar` de DSH Desktop `0.2.1-rc.3`:

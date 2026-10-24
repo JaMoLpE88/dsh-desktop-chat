@@ -163,6 +163,25 @@ test('an explicit logout clears the snapshot when the page reports it', async ()
   }
 })
 
+test('a skipped attempt is reported and never writes', async () => {
+  const { file, cleanup } = tempSnapshot()
+  try {
+    writeSnapshot(file, { version: 1, savedAt: '2026-01-01T00:00:00.000Z', ...TOKEN_STATE })
+    const skipped = response()
+    await route(ROUTES.save).handler(request('POST', { skip: 'not-ready', diag: { ready: false, attempts: 4 } }), skipped)
+    assert.equal(skipped.json().saved, false)
+    assert.equal(skipped.json().skipped, 'not-ready')
+    assert.equal(readSnapshot(file).storage.length, 3, 'the snapshot is untouched')
+
+    const state = response()
+    route(ROUTES.state).handler(request('GET'), state)
+    assert.equal(state.json().last.save.skipped, 'not-ready')
+    assert.equal(state.json().last.save.diag.attempts, 4)
+  } finally {
+    cleanup()
+  }
+})
+
 test('an empty page state never erases an existing snapshot', async () => {
   const { file, cleanup } = tempSnapshot()
   try {

@@ -19,6 +19,14 @@ Todas las versiones notables de este proyecto se documentan aquí. El formato si
   protegidas por cabecera y sin exponer credenciales.
 - Pruebas `node --test` para ambas caras (19 casos).
 
+### Corregido (antes de publicar)
+
+- El guardado se congelaba tras iniciar sesión: la web navega dentro de la SPA y no dispara
+  `did-finish-load`, así que el invitado quedaba marcado como «no listo» y solo se guardaba el estado
+  anterior al login. Ahora `did-stop-loading` y `did-navigate-in-page` rearman el guardado.
+- Los intentos descartados ya no son silenciosos: se envían como `{ skip, diag }` y `/state` muestra el
+  motivo y los contadores.
+
 ### Limitaciones conocidas
 
 - Las cookies `HttpOnly` (WAF/Cloudflare) no se persisten: el shell no las expone a plugins y el Host no
