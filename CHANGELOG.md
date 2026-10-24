@@ -17,7 +17,12 @@ Todas las versiones notables de este proyecto se documentan aquí. El formato si
   sesión explícito sí lo limpia.
 - Rutas de diagnóstico y mantenimiento: `state`, `session/restore`, `session/save`, `session/forget`,
   protegidas por cabecera y sin exponer credenciales.
-- Pruebas `node --test` para ambas caras (19 casos).
+- Pruebas `node --test` para ambas caras (22 casos).
+
+### Validado
+
+- 2026-10-25, Windows 11, DSH Desktop `0.2.1-rc.3`: login manual, cierre completo y reapertura; la sesión se
+  mantuvo (restauración de 27 claves con token antes de cargar la página). 22 pruebas en verde.
 
 ### Corregido (antes de publicar)
 
@@ -31,5 +36,4 @@ Todas las versiones notables de este proyecto se documentan aquí. El formato si
 
 - Las cookies `HttpOnly` (WAF/Cloudflare) no se persisten: el shell no las expone a plugins y el Host no
   puede importar `electron`.
-- La persistencia de sesión tras reinicio está pendiente de validación manual en DSH Desktop.
 - Sin botón de «olvidar sesión» en la interfaz; se usa la ruta documentada o el cierre de sesión en la web.

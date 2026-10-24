@@ -13,15 +13,14 @@ Todo lo que sigue se comprobó sobre la instalación real, no sobre documentaci�
 | Fuente | Cómo se obtuvo |
 |---|---|
 | Repositorio de referencia | `git clone https://github.com/jaychang1989/dsh-webchat` (commit `0d8c897`, versión `0.7.8`, Apache-2.0) |
-| Shell de escritorio (Electron main + preload) | Extraído de `C:\Users\moren\AppData\Local\Programs\DeepSeek Harness\resources\app.asar` (`lib/main.js`, `lib/preload-app.cjs`) |
+| Shell de escritorio (Electron main + preload) | Extraído de `%LOCALAPPDATA%\Programs\DeepSeek Harness\resources\app.asar` (`lib/main.js`, `lib/preload-app.cjs`) |
 | Runtime de DSH | `app.asar/dsh/node_modules/@deepseek-ai/...` (mismos paquetes que carga el Host) |
 | Servicios y slots vivos | `cordis_inspect_query` (Host `Service`, Cliente `Service`/`Slots`/`Builtin`) |
 | Snapshot del plugin original | `%USERPROFILE%\.dsh\dsh-webchat\session.json` (solo estructura y claves; **ningún valor leído ni copiado**) |
 
-Nota previa: la carpeta de trabajo `C:\Development\dsh-desktop-webchat` no era escribible por el sandbox
-(faltaba un permiso de Windows). Se reparó con la herramienta de diagnóstico del propio sandbox; se añadió
-control total para tu usuario en esa carpeta, con script de reversión en
-`C:\Development\dsh-desktop-webchat-acl-report\`. No se modificó ningún otro objeto.
+Nota previa: la carpeta de trabajo no era escribible por el sandbox (faltaba un permiso de Windows). Se
+reparó con la herramienta de diagnóstico del propio sandbox: se añadió control total para el usuario de la
+sesión en esa carpeta, con script de reversión. No se modificó ningún otro objeto.
 
 ---
 

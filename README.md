@@ -125,9 +125,13 @@ También puedes borrar a mano `~/.dsh/dsh-desktop-chat/session.json` con DSH cer
 | Perfil | `desktop` (el perfil web no tiene invitado nativo) |
 | `@jaychang1989/dsh-webchat` | no lo necesita; no conviene tener ambos instalados |
 
-Estado de validación: instalación y rutas comprobadas; **la persistencia de sesión tras reinicio está
-pendiente de prueba manual** (iniciar sesión, cerrar DSH, reabrir). No se anuncia como verificada hasta
-entonces.
+Estado de validación: **probado en Windows 11 con DSH Desktop 0.2.1-rc.3** (2026-10-25). Inicio de sesión
+manual en el panel, cierre completo de DSH, reapertura y la sesión seguía activa: en el nuevo arranque el
+plugin repuso 27 claves —token incluido— antes de cargar la página, que entró sin pedir credenciales.
+Ocultar y volver a mostrar el panel conserva la misma página (el invitado no se desmonta).
+
+No validado: macOS, Linux, otras versiones de DSH, y el comportamiento si DeepSeek empieza a exigir cookies
+`HttpOnly`.
 
 ## Desarrollo
 
