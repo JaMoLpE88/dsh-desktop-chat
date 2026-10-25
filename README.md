@@ -1,10 +1,29 @@
 # dsh-desktop-chat
 
+[![npm](https://img.shields.io/npm/v/@jamolpe88/dsh-desktop-chat?style=flat-square&logo=npm&label=npm)](https://www.npmjs.com/package/@jamolpe88/dsh-desktop-chat)
+[![GitHub release](https://img.shields.io/github/v/release/JaMoLpE88/dsh-desktop-chat?style=flat-square&logo=github&label=release)](https://github.com/JaMoLpE88/dsh-desktop-chat/releases)
+[![license](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square)](LICENSE)
+[![DSH](https://img.shields.io/badge/DSH-%3E%3D0.2.1--rc.3-4B8BBE?style=flat-square)](docs/architecture.md)
+[![platform](https://img.shields.io/badge/platform-Windows%2011-0078D6?style=flat-square)](#compatibility)
+[![dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/jamolpe88/dsh-desktop-chat)
+
 Opens the official **DeepSeek Chat** web app (`chat.deepseek.com`) inside **DeepSeek Harness Desktop**, in the
 center panel, through the desktop's native browser guest. One sidebar entry, the real page, and the session
 survives closing the app.
 
 **Español** → [README.es.md](README.es.md)
+
+![DeepSeek Harness Desktop with the Chat DeepSeek entry in the sidebar and the official DeepSeek Chat page open in the center panel](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/hero.png)
+
+![The Chat DeepSeek entry in the DSH sidebar, above the workspace list](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/menu.png)
+
+*The entry registers as one more DSH panel. Icon, label and selected state belong to the shell; the plugin
+only provides the destination.*
+
+![chat.deepseek.com open in the DSH center panel, with the DeepSeek header, welcome message, composer and the DeepThink and Smart Search controls](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/chat.png)
+
+*The official page inside the center panel: not a clone, not an iframe. The native guest keeps the session
+and the page state while you switch panels.*
 
 ## What it does
 
@@ -140,6 +159,7 @@ DSH closed.
 | Node | `>= 22` |
 | OS | Windows 11 (tested); macOS and Linux untested |
 | Profile | `desktop` (the web profile has no native guest) |
+| Catalog | [listed on dsh-plugin.org](https://dsh-plugin.org/plugins/jamolpe88/dsh-desktop-chat) |
 | `@jaychang1989/dsh-webchat` | not required; do not run both at once |
 
 Validation status: **tested on Windows 11 with DSH Desktop 0.2.1-rc.3** (2026-10-25). Manual sign-in in the

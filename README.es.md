@@ -1,10 +1,29 @@
 # dsh-desktop-chat
 
+[![npm](https://img.shields.io/npm/v/@jamolpe88/dsh-desktop-chat?style=flat-square&logo=npm&label=npm)](https://www.npmjs.com/package/@jamolpe88/dsh-desktop-chat)
+[![GitHub release](https://img.shields.io/github/v/release/JaMoLpE88/dsh-desktop-chat?style=flat-square&logo=github&label=release)](https://github.com/JaMoLpE88/dsh-desktop-chat/releases)
+[![licencia](https://img.shields.io/badge/license-Apache--2.0-blue?style=flat-square)](LICENSE)
+[![DSH](https://img.shields.io/badge/DSH-%3E%3D0.2.1--rc.3-4B8BBE?style=flat-square)](docs/architecture.md)
+[![plataforma](https://img.shields.io/badge/platform-Windows%2011-0078D6?style=flat-square)](#compatibilidad)
+[![dsh-plugin.org](https://dsh-plugin.org/badges/listed.svg)](https://dsh-plugin.org/plugins/jamolpe88/dsh-desktop-chat)
+
 Abre la web oficial de **DeepSeek Chat** (`chat.deepseek.com`) dentro de **DeepSeek Harness Desktop**, en el
 panel central, a través del navegador nativo integrado del escritorio. Una entrada en la barra lateral, la
 página real, y la sesión no se pierde al cerrar la aplicación.
 
 **English** → [README.md](README.md)
+
+![Ventana de DeepSeek Harness Desktop con la entrada Chat DeepSeek en la barra lateral y la web oficial de DeepSeek abierta en el panel central](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/hero.png)
+
+![Entrada Chat DeepSeek en la barra lateral de DSH, sobre la lista de espacios de trabajo](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/menu.png)
+
+*La entrada se registra como un panel más de DSH: el icono, la etiqueta y el estado seleccionado son del
+shell; el plugin solo aporta el destino.*
+
+![chat.deepseek.com abierto en el panel central de DSH, con la cabecera de DeepSeek, el mensaje de bienvenida, el campo de mensaje y los controles de Pensamiento Profundo y Búsqueda inteligente](https://raw.githubusercontent.com/JaMoLpE88/dsh-desktop-chat/main/docs/images/chat.png)
+
+*La página oficial dentro del panel central: no es un clon ni un iframe. El invitado nativo mantiene la
+sesión y el estado de la página al cambiar de panel.*
 
 ## Qué hace
 
@@ -142,6 +161,7 @@ También puedes borrar a mano `~/.dsh/dsh-desktop-chat/session.json` con DSH cer
 | Node | `>= 22` |
 | SO | Windows 11 (probado); macOS y Linux sin probar |
 | Perfil | `desktop` (el perfil web no tiene invitado nativo) |
+| Catálogo | [publicado en dsh-plugin.org](https://dsh-plugin.org/plugins/jamolpe88/dsh-desktop-chat) |
 | `@jaychang1989/dsh-webchat` | no lo necesita; no conviene tener ambos instalados |
 
 Estado de validación: **probado en Windows 11 con DSH Desktop 0.2.1-rc.3** (2026-10-25). Inicio de sesión

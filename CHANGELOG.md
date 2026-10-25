@@ -4,6 +4,15 @@ All notable changes to this project are documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and the versioning is
 [SemVer](https://semver.org/).
 
+## [0.1.2] — 2026-10-25
+
+### Changed
+
+- Both READMEs now show the plugin: a hero screenshot, the sidebar entry and the chat inside the panel, plus
+  badges for npm, GitHub release, license, DSH target, platform and the dsh-plugin.org listing.
+- Screenshots live in `docs/images/` and are referenced through absolute URLs, so they render on GitHub, npm
+  and the plugin catalog alike.
+
 ## [0.1.1] — 2026-10-25
 
 ### Changed
