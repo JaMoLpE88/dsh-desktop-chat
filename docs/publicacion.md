@@ -60,7 +60,11 @@ dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat
 `package.json` lleva `publishConfig.access: public`, `files` acotado (`lib/`, `cordis.patch.yml`, `NOTICE`,
 `README.md`, `CHANGELOG.md`, `LICENSE`) y `engines.dsh: >= 0.2.1-rc.3`.
 
-## 3. dsh-plugin.org (pendiente de escaneo)
+## 3. dsh-plugin.org (solicitud enviada; indexación pendiente)
+
+Solicitud enviada el 2026-10-25: <https://github.com/dshplugin/dsh-plugin-hub/issues/435>. La ficha del hub
+aún no existe; el hub indexa por el topic `dsh-plugin` y revisa a mano la compatibilidad (puede aparecer
+como *unconfirmed* hasta entonces).
 
 Requisitos verificados en <https://dsh-plugin.org/submit>:
 
@@ -74,7 +78,7 @@ Requisitos verificados en <https://dsh-plugin.org/submit>:
 | Licencia declarada | ✅ Apache-2.0 |
 | Publicado en npm (para el Plugin Hub interno) | ✅ |
 
-El hub escanea el topic; además se puede abrir un issue con la plantilla. Texto listo:
+Texto enviado en el issue (se mantiene aquí como referencia):
 
 ```markdown
 [Plugin submission] JaMoLpE88/dsh-desktop-chat — The official DeepSeek Chat inside DSH Desktop, signed in across restarts
