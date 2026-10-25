@@ -4,6 +4,21 @@ Abre la web oficial de **DeepSeek Chat** (`chat.deepseek.com`) dentro de **DeepS
 panel central, a través del navegador nativo integrado del escritorio. Una entrada en la barra lateral, la
 página real, y la sesión no se pierde al cerrar la aplicación.
 
+## English summary
+
+Opens the official DeepSeek Chat web app (`https://chat.deepseek.com/`) inside DeepSeek Harness Desktop: one
+sidebar entry renders the real page in the center column through the shell's native browser guest, and the
+manual login survives full app restarts. The panel shows the official site — no chat reimplementation, no
+agent tools, no model provider, no network service.
+
+```bash
+dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat
+```
+
+Requirements: DSH Desktop `>= 0.2.1-rc.3`, profile `desktop` (Windows 11 tested). Persistence carries the
+page's own `localStorage` and non-HttpOnly cookies; HttpOnly cookies are not reachable from a plugin.
+Diagnostics: `GET /api/dsh-desktop-chat/state` with header `x-dsh-desktop-chat: 1`.
+
 ## Qué hace
 
 - Añade una entrada «Chat DeepSeek» a la barra lateral de DSH Desktop.
