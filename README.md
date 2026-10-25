@@ -1,105 +1,90 @@
 # dsh-desktop-chat
 
-Abre la web oficial de **DeepSeek Chat** (`chat.deepseek.com`) dentro de **DeepSeek Harness Desktop**, en el
-panel central, a través del navegador nativo integrado del escritorio. Una entrada en la barra lateral, la
-página real, y la sesión no se pierde al cerrar la aplicación.
+Opens the official **DeepSeek Chat** web app (`chat.deepseek.com`) inside **DeepSeek Harness Desktop**, in the
+center panel, through the desktop's native browser guest. One sidebar entry, the real page, and the session
+survives closing the app.
 
-## English summary
+**Español** → [README.es.md](README.es.md)
 
-Opens the official DeepSeek Chat web app (`https://chat.deepseek.com/`) inside DeepSeek Harness Desktop: one
-sidebar entry renders the real page in the center column through the shell's native browser guest, and the
-manual login survives full app restarts. The panel shows the official site — no chat reimplementation, no
-agent tools, no model provider, no network service.
+## What it does
 
-```bash
-dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat
-```
+- Adds a **Chat DeepSeek** entry to the DSH Desktop sidebar.
+- Renders `https://chat.deepseek.com/` in the center panel, with the official interface untouched.
+- Restores the session on startup, so you do not sign in every time you open DSH.
+- Keeps the page alive when you switch panels: hiding and reopening neither reloads it nor drops the login.
+- Ships diagnostics (`GET /api/dsh-desktop-chat/state`) and a route to forget the saved session.
 
-Requirements: DSH Desktop `>= 0.2.1-rc.3`, profile `desktop` (Windows 11 tested). Persistence carries the
-page's own `localStorage` and non-HttpOnly cookies; HttpOnly cookies are not reachable from a plugin.
-Diagnostics: `GET /api/dsh-desktop-chat/state` with header `x-dsh-desktop-chat: 1`.
+## What it does not do
 
-## Qué hace
+- It does not reimplement the chat or replace the official site with its own interface.
+- It does not turn DeepSeek into a model provider, an agent or an automation tool.
+- It does not touch your existing DSH models, agents, plugins or providers.
+- It does not store passwords, read your personal browser profile, or send credentials anywhere.
+- It cannot keep `HttpOnly` cookies: DSH does not expose a guest partition's cookie store to plugins.
 
-- Añade una entrada «Chat DeepSeek» a la barra lateral de DSH Desktop.
-- Muestra `https://chat.deepseek.com/` en el panel central, con su interfaz oficial intacta.
-- Repone la sesión al arrancar, para no tener que iniciar sesión cada vez que abres DSH.
-- Mantiene la página viva al cambiar de panel: ocultar y volver no recarga ni cierra la sesión.
-- Ofrece diagnóstico (`/api/dsh-desktop-chat/state`) y una ruta para olvidar la sesión guardada.
+## Requirements
 
-## Qué no hace
+- **DSH Desktop** `>= 0.2.1-rc.3`, profile `desktop` (a plain web profile provides no native browser guest).
+- Windows 11 (tested); macOS and Linux untested.
+- No runtime dependencies; no separate Node installation required.
 
-- No reimplementa el chat ni sustituye la web oficial por una interfaz propia.
-- No convierte DeepSeek en un proveedor de modelo, agente o herramienta de automatización.
-- No toca modelos, agentes, plugins ni proveedores de DSH.
-- No guarda contraseñas, ni lee el perfil de tu navegador personal, ni envía credenciales a ningún sitio.
-- No puede conservar cookies `HttpOnly`: DSH no expone a los plugins el almacén de cookies de la vista.
+## Install
 
-## Requisitos
-
-- **DSH Desktop** `>= 0.2.1-rc.3`, perfil `desktop` (el perfil web no ofrece navegador integrado).
-- Windows 11 (probado), macOS/Linux sin probar.
-- Sin dependencias en tiempo de ejecución; no hace falta Node instalado aparte.
-
-## Instalación
-
-Con el paquete publicado en npm:
+From npm:
 
 ```bash
 dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat
 ```
 
-Desde el repositorio:
+From the repository:
 
 ```bash
 dsh plugin --profile desktop add github:JaMoLpE88/dsh-desktop-chat
 ```
 
-Durante el desarrollo, con el paquete en local:
+From a local checkout, while developing:
 
 ```bash
-dsh plugin --profile desktop add C:\ruta\a\dsh-desktop-chat
+dsh plugin --profile desktop add C:\path\to\dsh-desktop-chat
 ```
 
-Después de instalar, **reinicia DSH Desktop**. La entrada aparece en la barra lateral como
-«Chat DeepSeek».
+Restart DSH Desktop after installing. The entry appears in the sidebar as **Chat DeepSeek**.
 
-## Uso
+## Usage
 
-1. Pulsa «Chat DeepSeek» en la barra lateral: la página se carga en el panel central.
-2. Inicia sesión una vez, a mano, en la propia web.
-3. Vuelve a entrar cuando quieras (ocultar y mostrar el panel no recarga la página ni cierra la sesión).
-4. Al reiniciar DSH, el plugin repone el estado de la página antes de mostrarla: deberías seguir dentro.
+1. Click **Chat DeepSeek** in the sidebar: the page loads in the center panel.
+2. Sign in once, manually, on the official site.
+3. Come back whenever you want (hiding and reopening the panel neither reloads the page nor signs you out).
+4. After restarting DSH, the plugin restores the page state before showing it: you should still be signed in.
 
-Si tras reiniciar aparece la pantalla de acceso, no vuelvas a iniciar sesión sin antes revisar el
-diagnóstico (abajo): puede que el snapshot no se esté guardando y conviene saber por qué.
+If the sign-in screen appears after a restart, check the diagnostics below before signing in again: it will
+tell you whether the snapshot is being written, and why not.
 
-## Qué persiste y qué no
+## What is kept and what is not
 
-DSH Desktop entrega a cada vista de navegador una **partición de sesión que vive solo en memoria** (nombre
-aleatorio nuevo en cada arranque). No es configurable desde un plugin y no hay API pública para leer sus
-cookies. Por eso la sesión se conserva a nivel de página:
+DSH Desktop gives every browser view a **process-lifetime session partition** (a new random name on each
+start). A plugin cannot change that, and there is no public API to read the partition's cookies. The session
+is therefore preserved at the page level:
 
-| Dato | ¿Se conserva? | Dónde |
+| Data | Kept? | Where |
 |---|---|---|
-| `localStorage` de `chat.deepseek.com` (incluye `userToken`) | Sí | `%USERPROFILE%\.dsh\dsh-desktop-chat\session.json` (o `$DSH_HOME`) |
-| Cookies visibles por la página (`document.cookie`) | Sí | mismo fichero |
-| Cookies `HttpOnly` (WAF/Cloudflare: `cf_clearance`, `aws-waf-token`…) | **No** | inalcanzables desde un plugin en este DSH |
-| Contraseñas | Nunca | — |
+| `chat.deepseek.com` `localStorage` (includes `userToken`) | Yes | `%USERPROFILE%\.dsh\dsh-desktop-chat\session.json` (or `$DSH_HOME`) |
+| Cookies the page can see (`document.cookie`) | Yes | same file |
+| `HttpOnly` cookies (WAF/Cloudflare: `cf_clearance`, `aws-waf-token`…) | **No** | unreachable from a plugin in this DSH |
+| Passwords | Never | — |
 
-Consecuencia honesta: DeepSeek autentica con el token de `localStorage`, así que la sesión debería
-sobrevivir. Perder las cookies de WAF puede provocar una verificación anti-bot tras reiniciar; eso depende
-del sitio, no del plugin.
+Honest consequence: DeepSeek authenticates with the token in `localStorage`, so the session should survive.
+Losing the WAF cookies may trigger an anti-bot check after a restart; that is up to the site, not the plugin.
 
-## Diagnóstico
+## Diagnostics
 
-Con DSH abierto, en la misma URL de la interfaz (por ejemplo `http://127.0.0.1:59863`):
+With DSH running, on the same URL as the interface (for example `http://127.0.0.1:59863`):
 
 ```bash
 curl -H "x-dsh-desktop-chat: 1" http://127.0.0.1:59863/api/dsh-desktop-chat/state
 ```
 
-Devuelve solo recuentos y booleanos, nunca credenciales:
+It returns counts and booleans only, never credentials:
 
 ```json
 {
@@ -107,7 +92,7 @@ Devuelve solo recuentos y booleanos, nunca credenciales:
   "panelId": "deepseek-chat",
   "url": "https://chat.deepseek.com/",
   "session": {
-    "file": "C:\\Users\\<usuario>\\.dsh\\dsh-desktop-chat\\session.json",
+    "file": "C:\\Users\\<user>\\.dsh\\dsh-desktop-chat\\session.json",
     "exists": true,
     "savedAt": "2026-10-25T09:12:44.120Z",
     "hasUserToken": true,
@@ -118,66 +103,66 @@ Devuelve solo recuentos y booleanos, nunca credenciales:
 }
 ```
 
-`hasUserToken` es la señal que importa: si es `false` después de iniciar sesión, el guardado no está
-llegando y la sesión no puede sobrevivir.
+`hasUserToken` is the signal that matters: if it is `false` after signing in, saving is not reaching the Host
+and the session cannot survive. `last.save.diag` reports why a save was skipped (`not-ready`, `off-origin`,
+`read-failed`…). The port changes on every DSH start; take it from the interface URL.
 
-### Olvidar la sesión
+### Forget the session
 
-Cierra la pestaña/panel, y con DSH abierto:
+Close the panel, and with DSH running:
 
 ```bash
 curl -X POST -H "x-dsh-desktop-chat: 1" http://127.0.0.1:59863/api/dsh-desktop-chat/session/forget
 ```
 
-Borra el snapshot. En el siguiente arranque la página pedirá acceso de nuevo. Si cierras sesión en la propia
-web, el plugin lo detecta y también limpia el snapshot.
+That deletes the snapshot; the next start will ask for access again. Signing out on the website is also
+detected and clears the snapshot. You can also delete `~/.dsh/dsh-desktop-chat/session.json` by hand with
+DSH closed.
 
-También puedes borrar a mano `~/.dsh/dsh-desktop-chat/session.json` con DSH cerrado.
+## How it works
 
-## Cómo funciona
-
-- **Cara Host** (`lib/index.js`, proceso Host de DSH): registra cuatro rutas en `ctx.webServer`, guarda el
-  snapshot de forma atómica y con permisos de usuario, y nunca importa `electron`. Detalle y evidencia en
+- **Host half** (`lib/index.js`, DSH Host process): registers four routes on `ctx.webServer`, writes the
+  snapshot atomically with user-only permissions, and never imports `electron`. Details and evidence in
   [docs/architecture.md](docs/architecture.md).
-- **Cara Cliente** (`lib/client.js`): registra la fila de la barra lateral (`sidebar.panellist`) y el panel
-  (`main`) con el mismo id, reserva un invitado nativo, y mantiene el `<webview>` fuera del árbol de React
-  para que ocultar el panel no lo destruya.
-- **Restauración**: al cargar el origen, escribe `localStorage` y `document.cookie`, recarga una vez y a
-  partir de ahí guarda cada 10 s y al ocultar el panel.
-- **Guardas**: un guardado con la sesión vacía no puede machacar un snapshot que sí la tenía; un cierre de
-  sesión explícito sí lo limpia.
+- **Browser half** (`lib/client.js`): registers the sidebar row (`sidebar.panellist`) and the panel (`main`)
+  under one id, reserves a native guest, and keeps the `<webview>` outside the React tree so hiding the panel
+  does not destroy it.
+- **Restore**: on the page's origin it writes `localStorage` and `document.cookie`, reloads once, and from
+  then on saves every 10 s and whenever the panel is hidden.
+- **Guards**: a save with no session cannot overwrite a snapshot that had one; an explicit sign-out does
+  clear it.
 
-## Compatibilidad
+## Compatibility
 
 | | |
 |---|---|
-| DSH | `>= 0.2.1-rc.3` (única versión probada por el autor) |
+| DSH | `>= 0.2.1-rc.3` (the only version tested by the author) |
 | Node | `>= 22` |
-| SO | Windows 11 (probado); macOS y Linux sin probar |
-| Perfil | `desktop` (el perfil web no tiene invitado nativo) |
-| `@jaychang1989/dsh-webchat` | no lo necesita; no conviene tener ambos instalados |
+| OS | Windows 11 (tested); macOS and Linux untested |
+| Profile | `desktop` (the web profile has no native guest) |
+| `@jaychang1989/dsh-webchat` | not required; do not run both at once |
 
-Estado de validación: **probado en Windows 11 con DSH Desktop 0.2.1-rc.3** (2026-10-25). Inicio de sesión
-manual en el panel, cierre completo de DSH, reapertura y la sesión seguía activa: en el nuevo arranque el
-plugin repuso 27 claves —token incluido— antes de cargar la página, que entró sin pedir credenciales.
-Ocultar y volver a mostrar el panel conserva la misma página (el invitado no se desmonta).
+Validation status: **tested on Windows 11 with DSH Desktop 0.2.1-rc.3** (2026-10-25). Manual sign-in in the
+panel, full DSH exit, restart, and the session was still active: on the new start the plugin restored 27
+keys — token included — before loading the page, which opened without asking for credentials. Hiding and
+reshowing the panel keeps the same page (the guest is not remounted).
 
-No validado: macOS, Linux, otras versiones de DSH, y el comportamiento si DeepSeek empieza a exigir cookies
-`HttpOnly`.
+Not validated: macOS, Linux, other DSH versions, and the behaviour if DeepSeek starts requiring `HttpOnly`
+cookies.
 
-## Desarrollo
+## Development
 
 ```bash
 node --test
 ```
 
-Las pruebas cubren la cara Host (rutas, snapshot, guardas, diagnóstico sin secretos) y la cara Cliente
-(registro de slots, reserva del invitado, restauración, ocultación sin desmontaje) con un DOM simulado.
+The tests cover the Host half (routes, snapshot, guards, diagnostics without secrets) and the browser half
+(slot registration, guest reservation, restore, hide without unmount) against a simulated DOM.
 
-## Atribución y licencia
+## Attribution and license
 
-Implementación propia, inspirada en [jaychang1989/dsh-webchat](https://github.com/jaychang1989/dsh-webchat)
-y en su predecesor [xmuwenxiang/dsh-web-chat](https://github.com/xmuwenxiang/dsh-web-chat), ambos
-Apache-2.0. Detalle de qué se reutilizó (conceptos, no código) en [NOTICE](NOTICE).
+An independent implementation, inspired by [jaychang1989/dsh-webchat](https://github.com/jaychang1989/dsh-webchat)
+and its predecessor [xmuwenxiang/dsh-web-chat](https://github.com/xmuwenxiang/dsh-web-chat), both Apache-2.0.
+What was reused (concepts, not code) is listed in [NOTICE](NOTICE).
 
 [Apache-2.0](LICENSE).

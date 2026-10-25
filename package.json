@@ -1,6 +1,6 @@
 {
   "name": "@jamolpe88/dsh-desktop-chat",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Opens the official DeepSeek Chat web app inside DeepSeek Harness Desktop: one sidebar entry renders chat.deepseek.com in the center column through the desktop shell's native browser guest, and keeps you signed in across restarts. No chat UI, no agent tools, no runtime dependencies.",
   "keywords": [
     "dsh",
@@ -53,6 +53,7 @@
     "cordis.patch.yml",
     "NOTICE",
     "README.md",
+    "README.es.md",
     "CHANGELOG.md",
     "LICENSE"
   ],
