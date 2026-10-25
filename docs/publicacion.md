@@ -1,24 +1,29 @@
-# Fase D — Publicación (preparada, sin ejecutar)
+# Fase D — Publicación
 
-Nada de este documento se ha ejecutado. Ningún repositorio remoto, paquete npm ni envío al catálogo se ha
-creado. Todo requiere tu autorización explícita.
+Estado a 2026-10-25: **GitHub y npm publicados**; catálogo y jmolo.es preparados y sin enviar.
 
-## 0. Estado del proyecto
+## 0. Estado real
 
-- Repositorio local limpio, rama `main`, commits `88d3789` (inicial) y el de corrección del bucle de guardado.
+| Destino | Estado | Evidencia |
+|---|---|---|
+| GitHub | ✅ público | `https://github.com/JaMoLpE88/dsh-desktop-chat`, rama `main`, tag `v0.1.0`, release publicada, topics `dsh-plugin` incluido |
+| npm | ✅ `0.1.0` | `dist-tags.latest = 0.1.0`; tarball 200; instalado en el perfil `desktop` desde el registro |
+| Perfil `desktop` | ✅ desde npm | `"@jamolpe88/dsh-desktop-chat": "^0.1.0"`; ficheros instalados idénticos al repo |
+| dsh-plugin.org | ⏳ pendiente de escaneo | la ficha aún da 404; el hub indexa por el topic `dsh-plugin` |
+| jmolo.es | ⏳ preparado | texto en la sección 4; no publicado |
+
 - 22 pruebas en verde (`node --test`).
-- Instalado en el perfil `desktop` mediante enlace al directorio de trabajo (instalación de desarrollo).
 - Validado en Windows 11 con DSH Desktop `0.2.1-rc.3`: la sesión sobrevive al cierre completo.
-- Versión propuesta para publicar: **0.1.0**, tag `v0.1.0`.
 
-## 1. GitHub
+Nota: el primer intento de publicación creó un marcador `0.0.0-stage` («temporary package placeholder for
+staged publishing»). No es instalable como versión normal y no debe usarse; la versión buena es `0.1.0`.
+Deprecarlo requiere OTP: `npm deprecate "@jamolpe88/dsh-desktop-chat@0.0.0-stage" "usa 0.1.0"`.
 
-Repositorio: `https://github.com/JaMoLpE88/dsh-desktop-chat` (verificado libre; la cuenta `JaMoLpE88` existe).
+## 1. GitHub (hecho)
 
-Cuando lo autorices:
+Repositorio: `https://github.com/JaMoLpE88/dsh-desktop-chat` (público).
 
 ```bash
-git branch -M main
 git remote add origin https://github.com/JaMoLpE88/dsh-desktop-chat.git
 git push -u origin main
 git tag -a v0.1.0 -m "dsh-desktop-chat 0.1.0"
@@ -36,39 +41,38 @@ dsh-plugin, dsh, deepseek-harness, deepseek, deepseek-chat, webview, desktop
 > Official DeepSeek Chat inside DSH Desktop: one sidebar panel, the real chat.deepseek.com page, and a
 > session that survives restarts — no Electron internals, no chat reimplementation.
 
-## 2. npm
+## 2. npm (hecho)
 
-Paquete: `@jamolpe88/dsh-desktop-chat` (libre; npm no admite mayúsculas en el ámbito, por eso `jamolpe88`).
+Paquete: `@jamolpe88/dsh-desktop-chat` (npm no admite mayúsculas en el ámbito, por eso `jamolpe88`; el
+usuario de GitHub sigue siendo `JaMoLpE88`).
 
 ```bash
 npm login
 npm publish --access public
 ```
 
-`package.json` ya lleva `publishConfig.access: public`, `files` acotado (`lib/`, `cordis.patch.yml`,
-`NOTICE`, `README.md`, `CHANGELOG.md`, `LICENSE`) y `engines.dsh: >= 0.2.1-rc.3`.
-
-Tras publicar, comprobar la instalación limpia en un perfil de prueba:
+Publicado `0.1.0`; `dist-tags.latest = 0.1.0`. El perfil `desktop` ya consume la versión del registro:
 
 ```bash
 dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat
 ```
 
-Eso sustituye el enlace de desarrollo actual del perfil por la versión publicada.
+`package.json` lleva `publishConfig.access: public`, `files` acotado (`lib/`, `cordis.patch.yml`, `NOTICE`,
+`README.md`, `CHANGELOG.md`, `LICENSE`) y `engines.dsh: >= 0.2.1-rc.3`.
 
-## 3. dsh-plugin.org
+## 3. dsh-plugin.org (pendiente de escaneo)
 
 Requisitos verificados en <https://dsh-plugin.org/submit>:
 
 | Requisito | Estado |
 |---|---|
-| Repositorio público | pendiente de publicar |
-| Topic `dsh-plugin` | pendiente |
+| Repositorio público | ✅ |
+| Topic `dsh-plugin` | ✅ |
 | `package.json` en la raíz | ✅ |
 | README con comando de instalación | ✅ (`dsh plugin --profile desktop add @jamolpe88/dsh-desktop-chat`) |
 | Módulo con `apply(ctx)` | ✅ (`lib/index.js`) |
 | Licencia declarada | ✅ Apache-2.0 |
-| Publicado en npm (para el Plugin Hub interno) | pendiente |
+| Publicado en npm (para el Plugin Hub interno) | ✅ |
 
 El hub escanea el topic; además se puede abrir un issue con la plantilla. Texto listo:
 
