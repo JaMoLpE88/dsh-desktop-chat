@@ -17,20 +17,12 @@ All notable changes to this project are documented here. The format follows
 - Screenshots live in `docs/images/` and are referenced through absolute URLs, so they render on GitHub, npm
   and the plugin catalog alike.
 
-## [0.1.3] — 2026-11-08
-
-- Repository hygiene: removed internal process notes. No functional changes.
-
 ## [0.1.1] — 2026-10-25
 
 ### Changed
 
 - The README is now in English, because that is what the npm and catalog pages show. The Spanish version
   lives in [README.es.md](README.es.md) and is shipped in the package too.
-
-## [0.1.3] — 2026-11-08
-
-- Repository hygiene: removed internal process notes. No functional changes.
 
 ## [0.1.0] — 2026-10-25
 
