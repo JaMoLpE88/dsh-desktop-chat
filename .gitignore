@@ -3,3 +3,15 @@ node_modules/
 *.log
 session.json
 .DS_Store
+
+# Agent and planning artifacts (never committed)
+docs/superpowers/
+docs/plans/
+.superpowers/
+.research/
+.artifacts/
+.claude/
+.cursor/
+.codex/
+AGENTS.md
+CLAUDE.md
